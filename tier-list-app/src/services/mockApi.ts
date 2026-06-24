@@ -1,9 +1,38 @@
-{
-  "total_analyzed": 100,
-  "total_images_in_folder": 100,
-  "coverage_percentage": 100,
-  "images": [
-    {
+
+// Mock Data Service - Use this for development/testing
+// Switch to real API by setting USE_MOCK_DATA = false
+import type {  TierDef } from "./api";
+export const USE_MOCK_DATA = false; // Set to false to use real backend
+
+
+// ── Tier Definitions ───────────────────────────────────────────────────────
+const TIERS: TierDef[] = [
+  { id: "S", label: "S", color: "#ff4655", textColor: "#fff", glow: "rgba(255,70,85,0.35)", rowBg: "rgba(255,70,85,0.07)" },
+  { id: "A", label: "A", color: "#ff8c00", textColor: "#fff", glow: "rgba(255,140,0,0.35)", rowBg: "rgba(255,140,0,0.07)" },
+  { id: "B", label: "B", color: "#ffd700", textColor: "#111", glow: "rgba(255,215,0,0.3)", rowBg: "rgba(255,215,0,0.06)" },
+  { id: "C", label: "C", color: "#3ec16a", textColor: "#fff", glow: "rgba(62,193,106,0.35)", rowBg: "rgba(62,193,106,0.07)" },
+  { id: "D", label: "D", color: "#3b82f6", textColor: "#fff", glow: "rgba(59,130,246,0.35)", rowBg: "rgba(59,130,246,0.07)" },
+];
+
+
+
+interface ImageItem {
+  id: string;
+  filename: string;
+  filepath: string;
+  brand: string;
+  category: string;
+  flavor: string[];
+  package_color: string[];
+  size: string;
+  dietary: any[];
+  package_type: string;
+  notes: string;
+}
+
+// Image Item --------- 
+let Images: ImageItem[] = [
+  {
       "id": "snack_001",
       "filename": "snack_001.jpg",
       "filepath": "../assets/snacks/snack_001.jpg",
@@ -1303,5 +1332,69 @@
       "package_type": "multi-pack",
       "notes": "18 snack size cups minis variety pack, 3 varieties"
     }
-  ]
+]
+
+
+// ── Categories sourced from JSON ───────────────────────────────────────────
+
+const CATEGORIES = Images.category;
+
+// ── Mock API ───────────────────────────────────────────────────────────────
+export const mockApi = {
+async function fetchImages(category: string): Promise<ImageItem[]> {
+  await new Promise((r) => setTimeout(r, 500 + Math.random() * 600));
+  const cat = CATEGORIES.find((c) => c.id === categoryId);
+  if (!cat) return [];
+  const shuffled = [...cat.photos].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, Math.min(count, shuffled.length)).map((p, i) => ({
+    id: `${categoryId}-${p.unsplashId.slice(-8)}-${Date.now()}-${i}`,
+    unsplashId: p.unsplashId,
+    alt: p.alt,
+    category: categoryId,
+  }));
+}
+
+// ── ImageCard ──────────────────────────────────────────────────────────────
+
+interface CardProps {
+  item: ImageItem;
+  from: TierId;
+  isDragging: boolean;
+  onDragStart: (e: React.DragEvent, item: ImageItem, from: TierId) => void;
+  onDragEnd: () => void;
+  onRemove: (item: ImageItem, from: TierId) => void;
+}
+
+function ImageCard({ item, from, isDragging, onDragStart, onDragEnd, onRemove }: CardProps) {
+  return (
+    <div
+      draggable
+      onDragStart={(e) => onDragStart(e, item, from)}
+      onDragEnd={onDragEnd}
+      className={[
+        "group relative w-[84px] h-[84px] rounded shrink-0 overflow-hidden border cursor-grab active:cursor-grabbing transition-all duration-150",
+        isDragging
+          ? "opacity-25 scale-95 border-white/20"
+          : "border-white/10 hover:border-white/35 hover:scale-105",
+      ].join(" ")}
+    >
+      <img
+        src={`https://images.unsplash.com/photo-${item.unsplashId}?w=168&h=168&fit=crop&auto=format`}
+        alt={item.alt}
+        className="w-full h-full object-cover pointer-events-none bg-muted"
+        draggable={false}
+      />
+      <button
+        onClick={() => onRemove(item, from)}
+        className="absolute top-1 right-1 w-[18px] h-[18px] rounded-full bg-black/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive"
+        title={from === "pool" ? "Remove" : "Send back to pool"}
+      >
+        <X size={10} />
+      </button>
+      <div className="absolute bottom-0 left-0 right-0 px-1 py-0.5 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+        <p className="text-[9px] text-white/80 truncate leading-tight">{item.alt}</p>
+      </div>
+    </div>
+  );
+}
 }

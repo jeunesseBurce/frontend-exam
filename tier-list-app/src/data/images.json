@@ -1,0 +1,124 @@
+{
+  "categories": [
+    {
+      "id": "animals",
+      "label": "Animals",
+      "emoji": "🐾",
+      "photos": [
+        { "unsplashId": "1474511320723-9a56873867b5", "alt": "Arctic fox in snow" },
+        { "unsplashId": "1518020382113-a7e8fc38eac9", "alt": "Golden retriever puppy" },
+        { "unsplashId": "1437622368342-7a3d73a3410b", "alt": "Bengal tiger portrait" },
+        { "unsplashId": "1484406566174-0da8bb5e1c6a", "alt": "Brown bear in forest" },
+        { "unsplashId": "1425082661705-1834bfd09dca", "alt": "African elephant herd" },
+        { "unsplashId": "1566843972142-a7fcb70de55a", "alt": "Lion resting in savanna" },
+        { "unsplashId": "1550159930-40066082a4fc", "alt": "Emperor penguins" },
+        { "unsplashId": "1456926631375-92c8ce872def", "alt": "White cat portrait" }
+      ]
+    },
+    {
+      "id": "nature",
+      "label": "Nature",
+      "emoji": "🌿",
+      "photos": [
+        { "unsplashId": "1469474968028-56623f02e42e", "alt": "Sunlit forest path" },
+        { "unsplashId": "1501854140801-50d01698950b", "alt": "Mountain vista at dawn" },
+        { "unsplashId": "1518173946687-a4c8892bbd9f", "alt": "Cascading waterfall" },
+        { "unsplashId": "1500534314209-a25ddb2bd429", "alt": "Wildflower meadow" },
+        { "unsplashId": "1510784722862-e9b8aaaea7a2", "alt": "Autumn forest colors" },
+        { "unsplashId": "1507003211169-0a1dd7228f2d", "alt": "Northern lights over lake" },
+        { "unsplashId": "1415369629372-26f2fe60c467", "alt": "Cherry blossom avenue" },
+        { "unsplashId": "1448375240586-882707db888b", "alt": "Desert sand dunes" }
+      ]
+    },
+    {
+      "id": "architecture",
+      "label": "Architecture",
+      "emoji": "🏛",
+      "photos": [
+        { "unsplashId": "1486325212027-8081e485255e", "alt": "Glass skyscraper facade" },
+        { "unsplashId": "1480796927426-f609979314bd", "alt": "City skyline at dusk" },
+        { "unsplashId": "1477959858617-67f85cf4f1df", "alt": "Neon city at night" },
+        { "unsplashId": "1511818966892-d1787ef45e46", "alt": "Suspension bridge sunrise" },
+        { "unsplashId": "1431576901776-e539bd916ba2", "alt": "Gothic cathedral interior" },
+        { "unsplashId": "1470219255099-c7e862e48e38", "alt": "Ancient Roman colosseum" },
+        { "unsplashId": "1449824913935-59a10b8d2000", "alt": "Modern museum exterior" },
+        { "unsplashId": "1504551966953-ea1ef9e4d35a", "alt": "Brutalist concrete hall" }
+      ]
+    },
+    {
+      "id": "food",
+      "label": "Food",
+      "emoji": "🍕",
+      "photos": [
+        { "unsplashId": "1565299585323-38d6b0865b47", "alt": "Neapolitan pizza" },
+        { "unsplashId": "1484723091739-30a097e1aeef", "alt": "Gourmet burger" },
+        { "unsplashId": "1567620905732-2d1ec7ab7445", "alt": "Fresh salad bowl" },
+        { "unsplashId": "1519996529931-28324d5a630e", "alt": "Sushi platter" },
+        { "unsplashId": "1504674900247-0877df9cc836", "alt": "Street tacos" },
+        { "unsplashId": "1551024709-8f23befc548a", "alt": "Chocolate lava cake" },
+        { "unsplashId": "1495474472287-4d71bcdd2085", "alt": "Specialty coffee" },
+        { "unsplashId": "1546069901-ba9599a7e63c", "alt": "Avocado toast" }
+      ]
+    },
+    {
+      "id": "space",
+      "label": "Space",
+      "emoji": "🚀",
+      "photos": [
+        { "unsplashId": "1446776811953-b23d57bd21aa", "alt": "Spiral galaxy far away" },
+        { "unsplashId": "1451187580459-43490279c0fa", "alt": "Colorful gas nebula" },
+        { "unsplashId": "1462332420958-a05d1e002413", "alt": "Full moon closeup" },
+        { "unsplashId": "1484600899469-31a9c22c3a18", "alt": "Astronaut in orbit" },
+        { "unsplashId": "1419242902214-272b3f66ee7a", "alt": "Milky Way over mountains" },
+        { "unsplashId": "1614730321146-b6fa6a46bcb4", "alt": "Earth from deep space" },
+        { "unsplashId": "1608178398031-85fc72aa49a8", "alt": "Rocket launch at dusk" },
+        { "unsplashId": "1581822261290-1f489be39e63", "alt": "Space station exterior" }
+      ]
+    },
+    {
+      "id": "cars",
+      "label": "Cars",
+      "emoji": "🏎",
+      "photos": [
+        { "unsplashId": "1494976388531-d1058494cdd8", "alt": "Red Ferrari on open road" },
+        { "unsplashId": "1503376780353-7e6692767b70", "alt": "Classic Ford Mustang" },
+        { "unsplashId": "1492144534655-ae79c964c9d7", "alt": "Lamborghini in the city" },
+        { "unsplashId": "1552519507-da3b142c6e3d", "alt": "Porsche 911 mountain pass" },
+        { "unsplashId": "1542282811-943ef1a977c3", "alt": "BMW M3 on track" },
+        { "unsplashId": "1547744152-14d985cb937f", "alt": "Bugatti Chiron closeup" },
+        { "unsplashId": "1485291571150-772bcfc10da5", "alt": "Aston Martin detail" },
+        { "unsplashId": "1563720360172-67b8f3dce741", "alt": "McLaren at golden hour" }
+      ]
+    },
+    {
+      "id": "ocean",
+      "label": "Ocean",
+      "emoji": "🌊",
+      "photos": [
+        { "unsplashId": "1505118380757-91f5f5632de0", "alt": "Crashing ocean waves" },
+        { "unsplashId": "1507525428034-b723cf961d3e", "alt": "Tropical beach at sunset" },
+        { "unsplashId": "1468581264429-2548ef9eb732", "alt": "Coral reef underwater" },
+        { "unsplashId": "1519046904884-53103b34b206", "alt": "Underwater sea life" },
+        { "unsplashId": "1439405326-8f74f8b78d21", "alt": "Open ocean horizon" },
+        { "unsplashId": "1476673160081-cf065607f449", "alt": "Sailboat on open sea" },
+        { "unsplashId": "1510525009009-01f3a81e3e2a", "alt": "Manta ray gliding" },
+        { "unsplashId": "1437719417031-8b4480867dd0", "alt": "Dramatic coastal cliffs" }
+      ]
+    },
+    {
+      "id": "mountains",
+      "label": "Mountains",
+      "emoji": "🏔",
+      "photos": [
+        { "unsplashId": "1464822759023-fed622ff2c3b", "alt": "Snow-capped alpine peak" },
+        { "unsplashId": "1486870591958-9b9d0d1dda99", "alt": "Mountain sunrise panorama" },
+        { "unsplashId": "1454496522488-7a8e488e8606", "alt": "Highland hiking trail" },
+        { "unsplashId": "1506905925346-21bda4d32df4", "alt": "Crystal mountain lake" },
+        { "unsplashId": "1483728642387-6c3bdd6c93e5", "alt": "Alpine meadow and peaks" },
+        { "unsplashId": "1434394354755-0f7cd8f0d88b", "alt": "Misty mountain forest" },
+        { "unsplashId": "1491555103944-7c647fd857e6", "alt": "Climber on rocky summit" },
+        { "unsplashId": "1519931454-9c5e05a849c0", "alt": "Glacier and jagged peaks" }
+      ]
+    }
+  ]
+}
