@@ -1,3 +1,23 @@
+<img width="153" height="42" alt="Screenshot 2026-06-25 at 3 23 49 PM" src="https://github.com/user-attachments/assets/6d602899-3ef6-4fad-987c-4cc3472c6e55" />
+
+
+# Behaviorally Tier List App
+
+An app to be able to have tier of snack images. 
+
+
+# Running the app locally
+
+```js
+npm run dev
+```
+
+The app will run on `http://localhost:5174/`
+
+
+
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
