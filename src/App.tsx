@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { RefreshCw, Shuffle, Trash2, RotateCcw, Zap, X } from "lucide-react";
-import imageData from "./data/images.json";
+import { apiClient, type ImageRecord } from "./services";
 import BehaviorallyLogo from "./assets/behaviorally-logo.jpeg";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
-interface ImageItem {
-  id: string;
-  unsplashId: string;
-  alt: string;
-  category: string;
+// Pool items get a unique `uid` since the same snack can be fetched more
+// than once (apiClient.searchImages returns the same ImageRecord ids).
+interface PoolItem extends ImageRecord {
+  uid: string;
 }
 
 type TierId = "S" | "A" | "B" | "C" | "D" | "pool";
@@ -33,37 +32,53 @@ const TIERS: TierDef[] = [
   { id: "D", label: "D", color: "#3b82f6", textColor: "#fff", glow: "rgba(59,130,246,0.35)", rowBg: "rgba(59,130,246,0.07)" },
 ];
 
-// ── Categories sourced from JSON ───────────────────────────────────────────
+// ── Categories (snack categories served by the mock API) ───────────────────
 
-const CATEGORIES = imageData.categories;
+const CATEGORIES = [
+  { id: "chips", label: "Chips", emoji: "🥔" },
+  { id: "tortilla-chips", label: "Tortilla Chips", emoji: "🌽" },
+  { id: "corn-chips", label: "Corn Chips", emoji: "🌽" },
+  { id: "popcorn-chips", label: "Popcorn Chips", emoji: "🍿" },
+  { id: "cheese-snacks", label: "Cheese Snacks", emoji: "🧀" },
+  { id: "wheat-snacks", label: "Wheat Snacks", emoji: "🌾" },
+  { id: "corn-snacks", label: "Corn Snacks", emoji: "🌽" },
+  { id: "onion-rings", label: "Onion Rings", emoji: "🧅" },
+  { id: "snack-mix", label: "Snack Mix", emoji: "🥜" },
+  { id: "crackers", label: "Crackers", emoji: "🍘" },
+];
 
-// ── Mock API ───────────────────────────────────────────────────────────────
+// ── Snack package images ────────────────────────────────────────────────────
+// Maps each ImageRecord's `filename` to its bundled asset URL.
 
-async function fetchImages(categoryId: string, count: number): Promise<ImageItem[]> {
-  await new Promise((r) => setTimeout(r, 500 + Math.random() * 600));
-  const cat = CATEGORIES.find((c) => c.id === categoryId);
-  if (!cat) return [];
-  const shuffled = [...cat.photos].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, Math.min(count, shuffled.length)).map((p, i) => ({
-    id: `${categoryId}-${p.unsplashId.slice(-8)}-${Date.now()}-${i}`,
-    unsplashId: p.unsplashId,
-    alt: p.alt,
-    category: categoryId,
-  }));
+const SNACK_IMAGE_MODULES = import.meta.glob("./assets/snacks/*.jpg", {
+  eager: true,
+  import: "default",
+}) as Record<string, string>;
+
+function getSnackImageUrl(filename: string): string | undefined {
+  return SNACK_IMAGE_MODULES[`./assets/snacks/${filename}`];
+}
+
+// ── Fetch via mock API ──────────────────────────────────────────────────────
+
+async function fetchImages(categoryId: string, count: number): Promise<PoolItem[]> {
+  const { results } = await apiClient.searchImages({ category: categoryId, limit: count });
+  return results.map((rec, i) => ({ ...rec, uid: `${categoryId}-${rec.id}-${Date.now()}-${i}` }));
 }
 
 // ── ImageCard ──────────────────────────────────────────────────────────────
 
 interface CardProps {
-  item: ImageItem;
+  item: PoolItem;
   from: TierId;
   isDragging: boolean;
-  onDragStart: (e: React.DragEvent, item: ImageItem, from: TierId) => void;
+  onDragStart: (e: React.DragEvent, item: PoolItem, from: TierId) => void;
   onDragEnd: () => void;
-  onRemove: (item: ImageItem, from: TierId) => void;
+  onRemove: (item: PoolItem, from: TierId) => void;
 }
 
 function ImageCard({ item, from, isDragging, onDragStart, onDragEnd, onRemove }: CardProps) {
+  const label = item.product_name ?? item.brand ?? item.filename;
   return (
     <div
       draggable
@@ -77,8 +92,8 @@ function ImageCard({ item, from, isDragging, onDragStart, onDragEnd, onRemove }:
       ].join(" ")}
     >
       <img
-        src={`https://images.unsplash.com/photo-${item.unsplashId}?w=168&h=168&fit=crop&auto=format`}
-        alt={item.alt}
+        src={getSnackImageUrl(item.filename)}
+        alt={label ?? ""}
         className="w-full h-full object-cover pointer-events-none bg-muted"
         draggable={false}
       />
@@ -90,7 +105,7 @@ function ImageCard({ item, from, isDragging, onDragStart, onDragEnd, onRemove }:
         <X size={10} />
       </button>
       <div className="absolute bottom-0 left-0 right-0 px-1 py-0.5 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-        <p className="text-[9px] text-white/80 truncate leading-tight">{item.alt}</p>
+        <p className="text-[9px] text-white/80 truncate leading-tight">{label}</p>
       </div>
     </div>
   );
@@ -99,13 +114,13 @@ function ImageCard({ item, from, isDragging, onDragStart, onDragEnd, onRemove }:
 // ── App ────────────────────────────────────────────────────────────────────
 
 export default function App() {
-  const [tierData, setTierData] = useState<Record<TierId, ImageItem[]>>({
+  const [tierData, setTierData] = useState<Record<TierId, PoolItem[]>>({
     S: [], A: [], B: [], C: [], D: [], pool: [],
   });
-  const [selectedCats, setSelectedCats] = useState<Set<string>>(new Set(["animals"]));
+  const [selectedCats, setSelectedCats] = useState<Set<string>>(new Set(["chips"]));
   const [fetchCount, setFetchCount] = useState(6);
   const [loading, setLoading] = useState(false);
-  const [dragState, setDragState] = useState<{ item: ImageItem; from: TierId } | null>(null);
+  const [dragState, setDragState] = useState<{ item: PoolItem; from: TierId } | null>(null);
   const [dropTarget, setDropTarget] = useState<TierId | null>(null);
 
   const toggleCat = (id: string) => {
@@ -131,7 +146,7 @@ export default function App() {
     }
   };
 
-  const handleDragStart = (e: React.DragEvent, item: ImageItem, from: TierId) => {
+  const handleDragStart = (e: React.DragEvent, item: PoolItem, from: TierId) => {
     setDragState({ item, from });
     e.dataTransfer.effectAllowed = "move";
   };
@@ -149,7 +164,7 @@ export default function App() {
     if (from !== to) {
       setTierData((prev) => ({
         ...prev,
-        [from]: prev[from].filter((img) => img.id !== item.id),
+        [from]: prev[from].filter((img) => img.uid !== item.uid),
         [to]: [...prev[to], item],
       }));
     }
@@ -162,13 +177,13 @@ export default function App() {
     setDropTarget(null);
   };
 
-  const handleRemove = (item: ImageItem, from: TierId) => {
+  const handleRemove = (item: PoolItem, from: TierId) => {
     if (from === "pool") {
-      setTierData((prev) => ({ ...prev, pool: prev.pool.filter((i) => i.id !== item.id) }));
+      setTierData((prev) => ({ ...prev, pool: prev.pool.filter((i) => i.uid !== item.uid) }));
     } else {
       setTierData((prev) => ({
         ...prev,
-        [from]: prev[from].filter((i) => i.id !== item.id),
+        [from]: prev[from].filter((i) => i.uid !== item.uid),
         pool: [...prev.pool, item],
       }));
     }
@@ -369,10 +384,10 @@ export default function App() {
                   >
                     {tierData[tier.id].map((img) => (
                       <ImageCard
-                        key={img.id}
+                        key={img.uid}
                         item={img}
                         from={tier.id}
-                        isDragging={dragState?.item.id === img.id}
+                        isDragging={dragState?.item.uid === img.uid}
                         onDragStart={handleDragStart}
                         onDragEnd={handleDragEnd}
                         onRemove={handleRemove}
@@ -443,10 +458,10 @@ export default function App() {
               ) : (
                 tierData.pool.map((img) => (
                   <ImageCard
-                    key={img.id}
+                    key={img.uid}
                     item={img}
                     from="pool"
-                    isDragging={dragState?.item.id === img.id}
+                    isDragging={dragState?.item.uid === img.uid}
                     onDragStart={handleDragStart}
                     onDragEnd={handleDragEnd}
                     onRemove={handleRemove}
